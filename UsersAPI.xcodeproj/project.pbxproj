@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A527A0EE2D0053880085413F /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = A527A0ED2D0053880085413F /* .gitignore */; };
 		A5768C372CDBEA190081C602 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A5768C362CDBEA190081C602 /* SnapKit */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A527A0ED2D0053880085413F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		A5768C012CDBE6CB0081C602 /* UsersAPI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UsersAPI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5768C172CDBE6CC0081C602 /* UsersAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UsersAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5768C212CDBE6CC0081C602 /* UsersAPIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UsersAPIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,6 +95,7 @@
 		A5768BF82CDBE6CB0081C602 = {
 			isa = PBXGroup;
 			children = (
+				A527A0ED2D0053880085413F /* .gitignore */,
 				A5768C032CDBE6CB0081C602 /* UsersAPI */,
 				A5768C1A2CDBE6CC0081C602 /* UsersAPITests */,
 				A5768C242CDBE6CC0081C602 /* UsersAPIUITests */,
@@ -234,6 +237,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A527A0EE2D0053880085413F /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
