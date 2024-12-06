@@ -25,21 +25,19 @@ private enum UIConstant {
     static let cellRowHeight: CGFloat = 50
     
     static let tableViewTopInset: CGFloat = -30
-    static let tableViewHeight: CGFloat = 250
+    static let tableViewHeight: CGFloat = 150
     
     static let labelNumberOfLines: Int = 0
 }
 
 class InfoViewController: UIViewController {
     
-    let sections: [String] = ["Albums", "Comments", "Photos", "Posts", "Todos"]
+    let sections: [String] = ["Albums", "Posts", "Todos"]
     var albums: [Album] = [Album]()
-    var comments: [Comment] = [Comment]()
-    var photos: [Photo] = [Photo]()
+//    var comments: [Comment] = [Comment]()
+//    var photos: [Photo] = [Photo]()
     var posts: [Post] = [Post]()
     var todos: [Todo] = [Todo]()
-    var normalIamges: [UIImage] = []
-    var thumbnailImages: [UIImage] = []
     
     lazy var userImage: UIImageView = {
         let imageView = UIImageView()
@@ -160,33 +158,13 @@ extension InfoViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.row {
         case 0:
-            let albumsData = albums[indexPath.row]
-            let albumsViewController = AlbumsViewController(userIdLabel: albumsData.userID,
-                                                            idLabel: albumsData.id,
-                                                            titleLabel: albumsData.title)
+            let albumsViewController = AlbumsViewController()
             self.navigationController?.pushViewController(albumsViewController, animated: true)
         case 1:
-            let commentsData = comments[indexPath.row]
-            let commentsViewController = CommentsViewController(postIdLabel: commentsData.postID,
-                                                                idLabel: commentsData.id,
-                                                                nameLabel: commentsData.name,
-                                                                emailLabel: commentsData.email,
-                                                                bodyLabel: commentsData.body)
-            self.navigationController?.pushViewController(commentsViewController, animated: true)
-        case 2:
-            let photosData = photos[indexPath.row]
-            let photosViewController = PhotosViewController(albumIdLabel: photosData.albumID,
-                                                            idLabel: photosData.id,
-                                                            titleLabel: photosData.title)
-            self.navigationController?.pushViewController(photosViewController, animated: true)
-        case 3:
             let postsData = posts[indexPath.row]
-            let postsViewController = PostsViewController(userIdLabel: postsData.userID,
-                                                          idLabel: postsData.id,
-                                                          titleLabel: postsData.title,
-                                                          bodyLabel: postsData.body)
+            let postsViewController = PostsViewController()
             self.navigationController?.pushViewController(postsViewController, animated: true)
-        case 4:
+        case 2:
             let todosData = todos[indexPath.row]
             let todosViewController = TodosViewController(userIdLabel: todosData.userID,
                                                           idLabel: todosData.id,
@@ -213,26 +191,6 @@ extension InfoViewController {
                 guard let self else { return }
                 self.albums = albums.sorted {
                     $0.userID < $1.userID
-                }
-                self.tableView.reloadData()
-            }
-        }
-        
-        ApiManager.shared.sendRequest(apiType: .getComments) { (comments: Comments) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                self.comments = comments.sorted {
-                    $0.postID < $1.postID
-                }
-                self.tableView.reloadData()
-            }
-        }
-        
-        ApiManager.shared.sendRequest(apiType: .getPhotos) { (photos: Photos) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                self.photos = photos.sorted {
-                    $0.albumID < $1.albumID
                 }
                 self.tableView.reloadData()
             }

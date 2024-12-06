@@ -10,54 +10,20 @@ import SnapKit
 
 // MARK: - UIConstant
 private enum UIConstant {
-    static let labelFontSize: CGFloat = 14
-    
-    static let uiStackViewSpacing: CGFloat = 10
-    static let uiStackViewTopInset: CGFloat = 130
-    static let uiStackViewLeadingOffset: CGFloat = -16
-    static let uiStackViewTrailingOffset: CGFloat = 16
-    static let labelNumberOfLines: Int = 0
+    static let cellRowHeight: CGFloat = 500
 }
 
 class AlbumsViewController: UIViewController {
     
-    lazy var userIdLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: UIConstant.labelFontSize)
-        label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
-        return label
-    }()
     
-    lazy var idLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: UIConstant.labelFontSize)
-        label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
-        return label
-    }()
     
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: UIConstant.labelFontSize)
-        label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
-        return label
-    }()
-    
-    lazy var uiStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = UIConstant.uiStackViewSpacing
-        stackView.alignment = .center
-        stackView.distribution = .fill
-        [userIdLabel, idLabel, titleLabel].forEach {
-            stackView.addArrangedSubview($0)
-        }
-        return stackView
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .secondarySystemBackground
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(AlbumTableViewCell.self, forCellReuseIdentifier: AlbumTableViewCell.identifier)
+        tableView.rowHeight = UIConstant.cellRowHeight
+        return tableView
     }()
 
     // MARK: - ViewDidLoad
@@ -66,20 +32,26 @@ class AlbumsViewController: UIViewController {
         initialSetup()
         setupConstraints()
     }
-    
-    // MARK: - Init
-    init(userIdLabel: Int, idLabel: Int, titleLabel: String) {
-        super.init(nibName: nil, bundle: nil)
-        self.userIdLabel.text = "User ID: " + String(userIdLabel)
-        self.idLabel.text = "Albums ID: " + String(idLabel)
-        self.titleLabel.text = "Album title: " + titleLabel
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
 
+}
+
+extension AlbumsViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: AlbumTableViewCell.identifier, for: indexPath) as! AlbumTableViewCell
+        return cell
+    }
+    
+    
+}
+
+extension AlbumsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
 extension AlbumsViewController {
@@ -87,16 +59,16 @@ extension AlbumsViewController {
     func initialSetup() {
         navigationItem.title = "Albums"
         view.backgroundColor = .secondarySystemBackground
+        
+        tableView.delegate = self
+        tableView.dataSource = self
     }
     
     // MARK: - SetupConstraints
     func setupConstraints() {
-        view.addSubview(uiStackView)
-        uiStackView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.uiStackViewTopInset)
-            make.leading.equalToSuperview().offset(UIConstant.uiStackViewLeadingOffset)
-            make.trailing.equalToSuperview().offset(UIConstant.uiStackViewTrailingOffset)
-            make.centerX.equalToSuperview()
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
 }
