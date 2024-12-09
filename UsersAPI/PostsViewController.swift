@@ -16,7 +16,7 @@ private enum UIConstant {
     static let uiStackViewLeadingOffset: CGFloat = -16
     static let uiStackViewTrailingOffset: CGFloat = 16
     static let labelNumberOfLines: Int = 0
-    static let cellRowHeight: CGFloat = 150
+    static let cellRowHeight: CGFloat = 80
 }
 
 class PostsViewController: UIViewController {

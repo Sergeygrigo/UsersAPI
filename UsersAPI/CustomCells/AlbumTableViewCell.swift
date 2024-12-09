@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+// MARK: - UIConstant
 private enum UIConstant {
     static let titleLabelFontSize: CGFloat = 14
     static let titleLabelNumberOfLines: Int = 0
@@ -85,6 +86,7 @@ class AlbumTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupConstraints()
@@ -94,11 +96,21 @@ class AlbumTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func likeButtonTapped() {
+        
+    }
+    
+    @objc func commentButtonTapped() {
+        
+    }
+    
 }
 
 extension AlbumTableViewCell {
     
+    // MARK: - SetupConstraints
     func setupConstraints() {
+        contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(UIConstant.titleLabelTopInset)

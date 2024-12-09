@@ -20,52 +20,13 @@ private enum UIConstant {
 
 class TodosViewController: UIViewController {
     
-    lazy var userIdLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = .systemFont(ofSize: UIConstant.labelFontSize)
-        label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
-        return label
-    }()
-    
-    lazy var idLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = .systemFont(ofSize: UIConstant.labelFontSize)
-        label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
-        return label
-    }()
-    
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = .systemFont(ofSize: UIConstant.labelFontSize)
-        label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
-        return label
-    }()
-    
-    lazy var complitedLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = .systemFont(ofSize: UIConstant.labelFontSize)
-        label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
-        return label
-    }()
-    
-    lazy var uiStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = UIConstant.uiStackViewSpacing
-        stackView.alignment = .center
-        stackView.distribution = .fill
-        [userIdLabel, idLabel, titleLabel, complitedLabel].forEach {
-            stackView.addArrangedSubview($0)
-        }
-        return stackView
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .secondarySystemBackground
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(TodoTableViewCell.self, forCellReuseIdentifier: TodoTableViewCell.identifier)
+        tableView.rowHeight = 80
+        return tableView
     }()
 
     // MARK: - ViewDidLoad
@@ -75,22 +36,27 @@ class TodosViewController: UIViewController {
         setupConstraints()
     }
     
-    // MARK: - Init
-    init(userIdLabel: Int,
-         idLabel: Int,
-         titleLabel: String,
-         complitedLabel: Bool) {
-        super.init(nibName: nil, bundle: nil)
-        self.userIdLabel.text = "User ID: " + String(userIdLabel)
-        self.idLabel.text = "ID: " + String(idLabel)
-        self.titleLabel.text = "Notion: " + titleLabel
-        self.complitedLabel.text = "Complited: " + String(complitedLabel)
+}
+
+// MARK: - DataSource
+extension TodosViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.identifier, for: indexPath)
+        return cell
     }
     
+    
+}
+
+// MARK: - Delegate
+extension TodosViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
 extension TodosViewController {
@@ -98,16 +64,16 @@ extension TodosViewController {
     func initialSetup() {
         navigationItem.title = "Todos"
         view.backgroundColor = .secondarySystemBackground
+        
+        tableView.dataSource = self
+        tableView.delegate = self
     }
     
     // MARK: - SetupConstraints
     func setupConstraints() {
-        view.addSubview(uiStackView)
-        uiStackView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.uiStackViewTopInset)
-            make.leading.equalToSuperview().offset(UIConstant.uiStackViewLeadingOffset)
-            make.trailing.equalToSuperview().offset(UIConstant.uiStackViewTrailingOffset)
-            make.centerX.equalToSuperview()
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
 }

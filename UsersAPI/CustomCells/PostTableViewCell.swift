@@ -6,7 +6,9 @@
 //
 
 import UIKit
+import SnapKit
 
+// MARK: - UIConstant
 private enum UIConstant {
     static let userImageViewHeightWidth: CGFloat = 30
     static let fullNameLabelFontSize: CGFloat = 14
@@ -14,10 +16,10 @@ private enum UIConstant {
     static let postNameLabelFontSize: CGFloat = 12
     static let postTextViewFontSize: CGFloat = 12
     static let stackViewSpacing: CGFloat = 8
-    static let topInset: CGFloat = 16
-    static let bottomInset: CGFloat = 16
-    static let leadingInset: CGFloat = 16
-    static let trailingOffset: CGFloat = -16
+    static let topIndent: CGFloat = 16
+    static let bottomIndent: CGFloat = 16
+    static let leadingIndent: CGFloat = 16
+    static let trailingIndent: CGFloat = -16
 }
 
 class PostTableViewCell: UITableViewCell {
@@ -100,6 +102,7 @@ class PostTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupConstraints()
@@ -112,23 +115,26 @@ class PostTableViewCell: UITableViewCell {
 }
 
 extension PostTableViewCell {
+    
+    // MARK: - SetupConstraints
     func setupConstraints() {
+        contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(userImageView)
         userImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.topInset)
-            make.leading.equalToSuperview().inset(UIConstant.leadingInset)
+            make.top.equalToSuperview().inset(UIConstant.topIndent)
+            make.leading.equalToSuperview().inset(UIConstant.leadingIndent)
         }
         
         contentView.addSubview(horizontalStackView)
         horizontalStackView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.topInset)
-            make.trailing.equalToSuperview().offset(UIConstant.trailingOffset)
+            make.top.equalToSuperview().inset(UIConstant.topIndent)
+            make.leading.equalTo(userImageView.snp.trailing).inset(UIConstant.trailingIndent)
         }
         
         contentView.addSubview(verticalStackView)
         verticalStackView.snp.makeConstraints { make in
-            make.top.equalTo(horizontalStackView.snp.bottom).offset(UIConstant.topInset)
-            make.trailing.equalToSuperview().offset(UIConstant.trailingOffset)
+            make.top.equalTo(horizontalStackView.snp.bottom).offset(UIConstant.topIndent)
+            make.leading.equalTo(userImageView.snp.trailing).inset(UIConstant.trailingIndent)
         }
     }
 }

@@ -8,9 +8,9 @@
 import UIKit
 import SnapKit
 
+// MARK: - UIConstant
 private enum UIConstant {
     static let sectionLabelFontSize: CGFloat = 14
-    
     static let uiStackViewSpacing: CGFloat = 300
 }
 
@@ -43,6 +43,7 @@ class SectionInfoCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupConstraints()
@@ -59,7 +60,6 @@ extension SectionInfoCell {
     // MARK: - SetupConstraints
     func setupConstraints() {
         contentView.backgroundColor = .secondarySystemBackground
-        
         contentView.addSubview(sectionLabel)
         sectionLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)

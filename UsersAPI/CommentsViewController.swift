@@ -83,25 +83,6 @@ class CommentsViewController: UIViewController {
         initialSetup()
         setupConstraints()
     }
-    
-    // MARK: - Init
-    init(postIdLabel: Int,
-         idLabel: Int,
-         nameLabel: String,
-         emailLabel: String,
-         bodyLabel: String) {
-        super.init(nibName: nil, bundle: nil)
-        self.postIdLabel.text = "Post number: " + String(postIdLabel)
-        self.idLabel.text = "ID: " + String(idLabel)
-        self.nameLabel.text = "Name: " + nameLabel
-        self.emailLabel.text = "Email: " + emailLabel
-        self.bodyLabel.text = "Comment: " + bodyLabel
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
 
 }
 

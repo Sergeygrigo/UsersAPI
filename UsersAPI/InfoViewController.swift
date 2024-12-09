@@ -161,15 +161,12 @@ extension InfoViewController: UITableViewDelegate {
             let albumsViewController = AlbumsViewController()
             self.navigationController?.pushViewController(albumsViewController, animated: true)
         case 1:
-            let postsData = posts[indexPath.row]
+//            let postsData = posts[indexPath.row]
             let postsViewController = PostsViewController()
             self.navigationController?.pushViewController(postsViewController, animated: true)
         case 2:
-            let todosData = todos[indexPath.row]
-            let todosViewController = TodosViewController(userIdLabel: todosData.userID,
-                                                          idLabel: todosData.id,
-                                                          titleLabel: todosData.title,
-                                                          complitedLabel: todosData.completed)
+//            let todosData = todos[indexPath.row]
+            let todosViewController = TodosViewController()
             self.navigationController?.pushViewController(todosViewController, animated: true)
         default:
             break
