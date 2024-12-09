@@ -11,33 +11,28 @@ import SnapKit
 // MARK: - UIConstant
 private enum UIConstant {
     static let userImageHeightAndWidth: CGFloat = 100
-    
     static let fullNameLabelFontSize: CGFloat = 20
     static let usernameLabelFontSize: CGFloat = 14
     static let emailLabelFontSize: CGFloat = 14
     static let cityLabelFontsize: CGFloat = 14
-    
     static let uiStackViewSpacing: CGFloat = 8
     static let uiStackViewTopInset: CGFloat = 130
     static let uiStackViewLeadingOffset: CGFloat = -16
     static let uiStackViewTrailingOffset: CGFloat = 16
-    
     static let cellRowHeight: CGFloat = 50
-    
     static let tableViewTopInset: CGFloat = -30
     static let tableViewHeight: CGFloat = 150
-    
     static let labelNumberOfLines: Int = 0
 }
 
 class InfoViewController: UIViewController {
     
     let sections: [String] = ["Albums", "Posts", "Todos"]
-    var albums: [Album] = [Album]()
+//    var albums: [Album] = [Album]()
 //    var comments: [Comment] = [Comment]()
 //    var photos: [Photo] = [Photo]()
-    var posts: [Post] = [Post]()
-    var todos: [Todo] = [Todo]()
+//    var posts: [Post] = [Post]()
+//    var todos: [Todo] = [Todo]()
     
     lazy var userImage: UIImageView = {
         let imageView = UIImageView()
@@ -161,8 +156,7 @@ extension InfoViewController: UITableViewDelegate {
             let albumsViewController = AlbumsViewController()
             self.navigationController?.pushViewController(albumsViewController, animated: true)
         case 1:
-//            let postsData = posts[indexPath.row]
-            let postsViewController = PostsViewController()
+            let postsViewController = PostsViewController(fullName: fullNameLabel.text!, username: usernameLabel.text!)
             self.navigationController?.pushViewController(postsViewController, animated: true)
         case 2:
 //            let todosData = todos[indexPath.row]
@@ -183,35 +177,35 @@ extension InfoViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        ApiManager.shared.sendRequest(apiType: .getAlbums) { (albums: Albums) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                self.albums = albums.sorted {
-                    $0.userID < $1.userID
-                }
-                self.tableView.reloadData()
-            }
-        }
+//        ApiManager.shared.sendRequest(apiType: .getAlbums) { (albums: Albums) in
+//            DispatchQueue.main.async { [weak self] in
+//                guard let self else { return }
+//                self.albums = albums.sorted {
+//                    $0.userID < $1.userID
+//                }
+//                self.tableView.reloadData()
+//            }
+//        }
         
-        ApiManager.shared.sendRequest(apiType: .getPosts) { (posts: Posts) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                self.posts = posts.sorted {
-                    $0.userID < $1.userID
-                }
-                self.tableView.reloadData()
-            }
-        }
+//        ApiManager.shared.sendRequest(apiType: .getPosts) { (posts: Posts) in
+//            DispatchQueue.main.async { [weak self] in
+//                guard let self else { return }
+//                self.posts = posts.sorted {
+//                    $0.userID < $1.userID
+//                }
+//                self.tableView.reloadData()
+//            }
+//        }
         
-        ApiManager.shared.sendRequest(apiType: .getTodos) { (todos: Todos) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                self.todos = todos.sorted {
-                    $0.userID < $1.userID
-                }
-                self.tableView.reloadData()
-            }
-        }
+//        ApiManager.shared.sendRequest(apiType: .getTodos) { (todos: Todos) in
+//            DispatchQueue.main.async { [weak self] in
+//                guard let self else { return }
+//                self.todos = todos.sorted {
+//                    $0.userID < $1.userID
+//                }
+//                self.tableView.reloadData()
+//            }
+//        }
     }
     
     // MARK: - SetupConstraints

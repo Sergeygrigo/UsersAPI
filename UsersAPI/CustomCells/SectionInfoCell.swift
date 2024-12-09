@@ -11,7 +11,11 @@ import SnapKit
 // MARK: - UIConstant
 private enum UIConstant {
     static let sectionLabelFontSize: CGFloat = 14
+    static let sectionImageWidthHeight: CGFloat = 20
     static let uiStackViewSpacing: CGFloat = 300
+    static let topIndent: CGFloat = 16
+    static let leadingIndent: CGFloat = 16
+    static let trailingIndent: CGFloat = 16
 }
 
 class SectionInfoCell: UITableViewCell {
@@ -33,8 +37,8 @@ class SectionInfoCell: UITableViewCell {
         imageView.tintColor = .black
         imageView.image = UIImage(systemName: "chevron.right", compatibleWith: .none)
         imageView.snp.makeConstraints { make in
-            make.height.equalTo(20)
-            make.width.equalTo(20)
+            make.height.equalTo(UIConstant.sectionImageWidthHeight)
+            make.width.equalTo(UIConstant.sectionImageWidthHeight)
         }
         return imageView
     }()
@@ -62,14 +66,14 @@ extension SectionInfoCell {
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(sectionLabel)
         sectionLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(16)
-            make.leading.equalToSuperview().inset(16)
+            make.top.equalToSuperview().inset(UIConstant.topIndent)
+            make.leading.equalToSuperview().inset(UIConstant.leadingIndent)
         }
         
         contentView.addSubview(sectionImage)
         sectionImage.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(16)
-            make.trailing.equalToSuperview().inset(16)
+            make.top.equalToSuperview().inset(UIConstant.topIndent)
+            make.trailing.equalToSuperview().inset(UIConstant.trailingIndent)
         }
     }
 }

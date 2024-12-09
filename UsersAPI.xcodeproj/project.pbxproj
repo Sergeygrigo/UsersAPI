@@ -36,7 +36,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A5768C292CDBE6CC0081C602 /* Exceptions for "UsersAPI" folder in "UsersAPI" target */ = {
+		A527A1612D06E16D0085413F /* Exceptions for "UsersAPI" folder in "UsersAPI" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -46,10 +46,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A5768C032CDBE6CB0081C602 /* UsersAPI */ = {
+		A527A1492D06E16D0085413F /* UsersAPI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A5768C292CDBE6CC0081C602 /* Exceptions for "UsersAPI" folder in "UsersAPI" target */,
+				A527A1612D06E16D0085413F /* Exceptions for "UsersAPI" folder in "UsersAPI" target */,
 			);
 			path = UsersAPI;
 			sourceTree = "<group>";
@@ -96,7 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				A527A0ED2D0053880085413F /* .gitignore */,
-				A5768C032CDBE6CB0081C602 /* UsersAPI */,
+				A527A1492D06E16D0085413F /* UsersAPI */,
 				A5768C1A2CDBE6CC0081C602 /* UsersAPITests */,
 				A5768C242CDBE6CC0081C602 /* UsersAPIUITests */,
 				A5768C022CDBE6CB0081C602 /* Products */,
@@ -129,7 +129,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A5768C032CDBE6CB0081C602 /* UsersAPI */,
+				A527A1492D06E16D0085413F /* UsersAPI */,
 			);
 			name = UsersAPI;
 			packageProductDependencies = (

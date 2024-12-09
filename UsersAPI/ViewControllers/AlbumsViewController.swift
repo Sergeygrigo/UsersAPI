@@ -15,6 +15,9 @@ private enum UIConstant {
 
 class AlbumsViewController: UIViewController {
     
+    var albums: [Album] = [Album]()
+    var photos: [Photo] = [Photo]()
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .secondarySystemBackground
@@ -36,11 +39,13 @@ class AlbumsViewController: UIViewController {
 // MARK: - DataSource
 extension AlbumsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: AlbumTableViewCell.identifier, for: indexPath) as! AlbumTableViewCell
+        let photosData = photos[indexPath.row].title
+        cell.titleLabel.text = photosData
         return cell
     }
 }
@@ -60,6 +65,26 @@ extension AlbumsViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        ApiManager.shared.sendRequest(apiType: .getAlbums) { (albums: Albums) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.albums = albums.sorted { 
+                    $0.userID < $1.userID
+                }
+                self.tableView.reloadData()
+            }
+        }
+        
+        ApiManager.shared.sendRequest(apiType: .getPhotos) { (photos: Photos) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.photos = photos.sorted {
+                    $0.albumID < $1.albumID
+                }
+                self.tableView.reloadData()
+            }
+        }
     }
     
     // MARK: - SetupConstraints

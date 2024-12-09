@@ -10,6 +10,7 @@ import SnapKit
 
 // MARK: - UIConstant
 private enum UIConstant {
+    static let tableViewRowHeight: CGFloat = 80
     static let labelFontSize: CGFloat = 14
     static let uiStackViewSpacing: CGFloat = 10
     static let uiStackViewTopInset: CGFloat = 130
@@ -20,12 +21,14 @@ private enum UIConstant {
 
 class TodosViewController: UIViewController {
     
+    var todos: [Todo] = [Todo]()
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .secondarySystemBackground
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(TodoTableViewCell.self, forCellReuseIdentifier: TodoTableViewCell.identifier)
-        tableView.rowHeight = 80
+        tableView.rowHeight = UIConstant.tableViewRowHeight
         return tableView
     }()
 
@@ -41,11 +44,13 @@ class TodosViewController: UIViewController {
 // MARK: - DataSource
 extension TodosViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return todos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.identifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.identifier, for: indexPath) as! TodoTableViewCell
+        let todosData = todos[indexPath.row]
+        cell.todoLabel.text = todosData.title
         return cell
     }
     
@@ -67,6 +72,16 @@ extension TodosViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
+        
+        ApiManager.shared.sendRequest(apiType: .getTodos) { (todos: Todos) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.todos = todos.sorted {
+                    $0.userID < $1.userID
+                }
+                self.tableView.reloadData()
+            }
+        }
     }
     
     // MARK: - SetupConstraints

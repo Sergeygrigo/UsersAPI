@@ -29,7 +29,6 @@ class AlbumTableViewCell: UITableViewCell {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hello"
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: UIConstant.titleLabelFontSize)
         label.textAlignment = .center

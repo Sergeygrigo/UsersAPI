@@ -20,6 +20,9 @@ private enum UIConstant {
     static let bottomIndent: CGFloat = 16
     static let leadingIndent: CGFloat = 16
     static let trailingIndent: CGFloat = -16
+    static let labelNumberOfLines: Int = 0
+    static let postTextViewWidth: CGFloat = 200
+    static let postTextViewHeight: CGFloat = 150
 }
 
 class PostTableViewCell: UITableViewCell {
@@ -40,37 +43,39 @@ class PostTableViewCell: UITableViewCell {
     
     lazy var fullNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hello"
         label.textColor = .black
         label.font = .boldSystemFont(ofSize: UIConstant.fullNameLabelFontSize)
-        label.textAlignment = .center
+        label.textAlignment = .natural
         return label
     }()
     
     lazy var usernameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hello"
         label.textColor = .systemGray
         label.font = .boldSystemFont(ofSize: UIConstant.usernameLabelFontSize)
-        label.textAlignment = .center
+        label.textAlignment = .natural
         return label
     }()
     
     lazy var postNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hello"
         label.textColor = .black
         label.font = .boldSystemFont(ofSize: UIConstant.postNameLabelFontSize)
-        label.textAlignment = .center
+        label.textAlignment = .natural
+        label.numberOfLines = UIConstant.labelNumberOfLines
         return label
     }()
     
     lazy var postTextView: UITextView = {
         let textView = UITextView()
-        textView.text = "Hello"
+        textView.backgroundColor = .secondarySystemBackground
         textView.textColor = .black
         textView.font = .systemFont(ofSize: UIConstant.postTextViewFontSize)
         textView.textAlignment = .natural
+        textView.snp.makeConstraints { make in
+            make.width.equalTo(UIConstant.postTextViewWidth)
+            make.height.equalTo(UIConstant.postTextViewHeight)
+        }
         return textView
     }()
     
@@ -90,7 +95,7 @@ class PostTableViewCell: UITableViewCell {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = UIConstant.stackViewSpacing
-        stackView.alignment = .center
+        stackView.alignment = .leading
         stackView.distribution = .fill
         [postNameLabel, postTextView].forEach {
             stackView.addArrangedSubview($0)
@@ -135,6 +140,7 @@ extension PostTableViewCell {
         verticalStackView.snp.makeConstraints { make in
             make.top.equalTo(horizontalStackView.snp.bottom).offset(UIConstant.topIndent)
             make.leading.equalTo(userImageView.snp.trailing).inset(UIConstant.trailingIndent)
+            make.trailing.equalToSuperview().offset(UIConstant.trailingIndent)
         }
     }
 }

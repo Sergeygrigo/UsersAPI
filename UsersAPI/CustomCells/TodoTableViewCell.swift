@@ -11,6 +11,8 @@ import SnapKit
 // MARK: - UIConstant
 private enum UIConstant {
     static let todoLabelFontSize: CGFloat = 14
+    static let todoLabelNumberOfLines: Int = 0
+    static let todoLabelWidth: CGFloat = 300
     static let leadingIndent: CGFloat = 16
     static let trailingIndent: CGFloat = -16
 }
@@ -21,10 +23,13 @@ class TodoTableViewCell: UITableViewCell {
 
     lazy var todoLabel: UILabel = {
         let label = UILabel()
-        label.text = "Gym"
         label.textColor = .black
         label.font = .systemFont(ofSize: UIConstant.todoLabelFontSize)
-        label.textAlignment = .center
+        label.textAlignment = .natural
+        label.numberOfLines = UIConstant.todoLabelNumberOfLines
+        label.snp.makeConstraints { make in
+            make.width.equalTo(UIConstant.todoLabelWidth)
+        }
         return label
     }()
     
