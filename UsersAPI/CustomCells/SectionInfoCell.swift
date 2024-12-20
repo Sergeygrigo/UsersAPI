@@ -8,16 +8,6 @@
 import UIKit
 import SnapKit
 
-// MARK: - UIConstant
-private enum UIConstant {
-    static let sectionLabelFontSize: CGFloat = 14
-    static let sectionImageWidthHeight: CGFloat = 20
-    static let uiStackViewSpacing: CGFloat = 300
-    static let topIndent: CGFloat = 16
-    static let leadingIndent: CGFloat = 16
-    static let trailingIndent: CGFloat = 16
-}
-
 class SectionInfoCell: UITableViewCell {
     
     static let identifier = "SectionInfoCell"
@@ -25,7 +15,7 @@ class SectionInfoCell: UITableViewCell {
     lazy var sectionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: UIConstant.sectionLabelFontSize)
+        label.font = UIFont.systemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .left
         return label
     }()
@@ -37,8 +27,8 @@ class SectionInfoCell: UITableViewCell {
         imageView.tintColor = .black
         imageView.image = UIImage(systemName: "chevron.right", compatibleWith: .none)
         imageView.snp.makeConstraints { make in
-            make.height.equalTo(UIConstant.sectionImageWidthHeight)
-            make.width.equalTo(UIConstant.sectionImageWidthHeight)
+            make.height.equalTo(UIConstants.sectionImageHeightAndWidth)
+            make.width.equalTo(UIConstants.sectionImageHeightAndWidth)
         }
         return imageView
     }()
@@ -66,14 +56,14 @@ extension SectionInfoCell {
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(sectionLabel)
         sectionLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.topIndent)
-            make.leading.equalToSuperview().inset(UIConstant.leadingIndent)
+            make.top.equalToSuperview().inset(UIConstants.topIndent)
+            make.leading.equalToSuperview().inset(UIConstants.leadingIndent)
         }
         
         contentView.addSubview(sectionImage)
         sectionImage.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.topIndent)
-            make.trailing.equalToSuperview().inset(UIConstant.trailingIndent)
+            make.top.equalToSuperview().inset(UIConstants.topIndent)
+            make.trailing.equalToSuperview().inset(UIConstants.trailingIndent)
         }
     }
 }

@@ -8,17 +8,6 @@
 import UIKit
 import SnapKit
 
-// MARK: - UIConstant
-private enum UIConstant {
-    static let labelFontSize: CGFloat = 14
-    static let uiStackViewSpacing: CGFloat = 10
-    static let uiStackViewTopInset: CGFloat = 130
-    static let uiStackViewLeadingOffset: CGFloat = -16
-    static let uiStackViewTrailingOffset: CGFloat = 16
-    static let labelNumberOfLines: Int = 0
-    static let cellRowHeight: CGFloat = 250
-}
-
 class PostsViewController: UIViewController {
     
     var posts: [Post] = [Post]()
@@ -30,7 +19,8 @@ class PostsViewController: UIViewController {
         tableView.backgroundColor = .secondarySystemBackground
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.identifier)
-        tableView.rowHeight = UIConstant.cellRowHeight
+        tableView.rowHeight = UIConstants.cellRowHeightPostsVC
+        tableView.estimatedRowHeight = UITableView.automaticDimension
         return tableView
     }()
     
@@ -65,9 +55,9 @@ extension PostsViewController: UITableViewDataSource {
         cell.usernameLabel.text = username
         cell.postNameLabel.text = postsData.title
         cell.postTextView.text = postsData.body
+        cell.delegate = self
         return cell
     }
-    
     
 }
 
@@ -103,5 +93,12 @@ extension PostsViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+}
+
+extension PostsViewController: PostTableViewCellDelegate {
+    func pushCommentViewController() {
+        let vc = PostCommentsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }

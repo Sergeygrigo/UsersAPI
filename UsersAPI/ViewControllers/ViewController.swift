@@ -8,11 +8,6 @@
 import UIKit
 import SnapKit
 
-// MARK: - UIConstant
-private enum UIConstant {
-    static let cellRowHeight: CGFloat = 70
-}
-
 class ViewController: UIViewController {
         
     var users: [User] = [User]()
@@ -22,7 +17,8 @@ class ViewController: UIViewController {
         tableView.backgroundColor = .secondarySystemBackground
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UserInfoCell.self, forCellReuseIdentifier: UserInfoCell.identifier)
-        tableView.rowHeight = UIConstant.cellRowHeight
+        tableView.estimatedRowHeight = UIConstants.cellRowHeightVC
+        tableView.rowHeight = UITableView.automaticDimension
         return tableView
     }()
     
@@ -56,7 +52,8 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let usersData = users[indexPath.row]
-        let infoViewController = InfoViewController(userImage: UIImage(named: "user")!,
+        let infoViewController = InfoViewController(userID: usersData.id,
+                                                    userImage: UIImage(named: "user")!,
                                                     fullNameLabel: usersData.name,
                                                     usernameLabel: usersData.username,
                                                     emailLabel: usersData.email,

@@ -1,23 +1,30 @@
 //
-//  TodosViewController.swift
+//  PhotoCommentsViewController.swift
 //  UsersAPI
 //
-//  Created by Сергей Григоренко on 28.11.2024.
+//  Created by Сергей Григоренко on 11.12.2024.
 //
 
 import UIKit
 import SnapKit
 
-class TodosViewController: UIViewController {
+protocol PhotoCommentsViewControllerDelegate: AnyObject {
+    func presentCommentViewController()
+}
+
+class PhotoCommentsViewController: UIViewController {
     
-    var todos: [Todo] = [Todo]()
+    var comments: [Comment] = [Comment]()
+    
+    weak var delegate: PhotoCommentsViewControllerDelegate?
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .secondarySystemBackground
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(TodoTableViewCell.self, forCellReuseIdentifier: TodoTableViewCell.identifier)
-        tableView.rowHeight = UIConstants.cellRowHeightTodosVC
+        tableView.register(PhotoCommentsTableViewCell.self, forCellReuseIdentifier: PhotoCommentsTableViewCell.identifier)
+        tableView.rowHeight = UIConstants.cellRowHeightPhotoCommentsVC
+        tableView.estimatedRowHeight = UITableView.automaticDimension
         return tableView
     }()
 
@@ -26,47 +33,49 @@ class TodosViewController: UIViewController {
         super.viewDidLoad()
         initialSetup()
         setupConstraints()
+        delegate?.presentCommentViewController()
     }
-    
+
 }
 
 // MARK: - DataSource
-extension TodosViewController: UITableViewDataSource {
+extension PhotoCommentsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todos.count
+        return comments.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TodoTableViewCell.identifier, for: indexPath) as! TodoTableViewCell
-        let todosData = todos[indexPath.row]
-        cell.todoLabel.text = todosData.title
+        let cell = tableView.dequeueReusableCell(withIdentifier: PhotoCommentsTableViewCell.identifier, for: indexPath) as! PhotoCommentsTableViewCell
+        let commentsData = comments[indexPath.row]
+        cell.commentNameLabel.text = commentsData.name
+        cell.emailLabel.text = commentsData.email
+        cell.commentTextView.text = commentsData.body
         return cell
     }
-    
-    
 }
 
 // MARK: - Delegate
-extension TodosViewController: UITableViewDelegate {
+extension PhotoCommentsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
-extension TodosViewController {
+extension PhotoCommentsViewController {
+    
     // MARK: - InitialSetup
     func initialSetup() {
-        navigationItem.title = "Todos"
+        navigationItem.title = "Comments"
         view.backgroundColor = .secondarySystemBackground
         
         tableView.dataSource = self
         tableView.delegate = self
         
-        ApiManager.shared.sendRequest(apiType: .getTodos) { (todos: Todos) in
+        ApiManager.shared.sendRequest(apiType: .getComments) { (comments: Comments) in
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
-                self.todos = todos.sorted {
-                    $0.userID < $1.userID
+                self.comments = comments.sorted {
+                    $0.postID < $1.postID
                 }
                 self.tableView.reloadData()
             }

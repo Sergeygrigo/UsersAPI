@@ -8,21 +8,6 @@
 import UIKit
 import SnapKit
 
-// MARK: - UIConstant
-private enum UIConstant {
-    static let nameLabelFontSize: CGFloat = 14
-    static let emailLabelFontSize: CGFloat = 11
-    static let emailLabelWidth: CGFloat = 200
-    
-    static let userImageHeight: CGFloat = 30
-    static let userImageWidth: CGFloat = 30
-    
-    static let labelStackViewSpacing: CGFloat = 10
-    
-    static let uiStackViewSpacing: CGFloat = 16
-    static let uiStackViewInset: CGFloat = 16
-}
-
 class UserInfoCell: UITableViewCell {
     
     static let identifier = "UserInfoCell"
@@ -32,8 +17,8 @@ class UserInfoCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.snp.makeConstraints { make in
-            make.height.equalTo(UIConstant.userImageHeight)
-            make.width.equalTo(UIConstant.userImageWidth)
+            make.height.equalTo(UIConstants.thumbnailImageHeightAndWidth)
+            make.width.equalTo(UIConstants.thumbnailImageHeightAndWidth)
         }
         return imageView
     }()
@@ -41,7 +26,7 @@ class UserInfoCell: UITableViewCell {
     lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: UIConstant.nameLabelFontSize)
+        label.font = UIFont.boldSystemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .left
         return label
     }()
@@ -49,10 +34,10 @@ class UserInfoCell: UITableViewCell {
     lazy var emailLabel: UILabel = {
         let label = UILabel()
         label.textColor = .gray
-        label.font = UIFont.boldSystemFont(ofSize: UIConstant.emailLabelFontSize)
+        label.font = UIFont.boldSystemFont(ofSize: UIConstants.elevenFontSize)
         label.textAlignment = .left
         label.snp.makeConstraints { make in
-            make.width.equalTo(UIConstant.emailLabelWidth)
+            make.width.equalTo(UIConstants.emailLabelWidth)
         }
         return label
     }()
@@ -60,7 +45,7 @@ class UserInfoCell: UITableViewCell {
     lazy var labelStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = UIConstant.labelStackViewSpacing
+        stackView.spacing = UIConstants.stackViewTenSpacing
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
         [nameLabel, emailLabel].forEach {
@@ -72,7 +57,7 @@ class UserInfoCell: UITableViewCell {
     lazy var uiStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.spacing = UIConstant.uiStackViewSpacing
+        stackView.spacing = UIConstants.stackViewSixteenSpacing
         stackView.alignment = .fill
         stackView.distribution = .fillProportionally
         [userImage, labelStackView].forEach {
@@ -104,8 +89,9 @@ extension UserInfoCell {
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(uiStackView)
         uiStackView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.uiStackViewInset)
-            make.leading.equalToSuperview().inset(UIConstant.uiStackViewInset)
+            make.top.equalToSuperview().inset(UIConstants.topIndent)
+            make.leading.equalToSuperview().inset(UIConstants.leadingIndent)
+            make.bottom.equalToSuperview().inset(UIConstants.bottomIndent)
         }
     }
 }

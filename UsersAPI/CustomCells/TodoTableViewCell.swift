@@ -8,15 +8,6 @@
 import UIKit
 import SnapKit
 
-// MARK: - UIConstant
-private enum UIConstant {
-    static let todoLabelFontSize: CGFloat = 14
-    static let todoLabelNumberOfLines: Int = 0
-    static let todoLabelWidth: CGFloat = 300
-    static let leadingIndent: CGFloat = 16
-    static let trailingIndent: CGFloat = -16
-}
-
 class TodoTableViewCell: UITableViewCell {
     
     static let identifier = "TodoTableViewCell"
@@ -24,11 +15,11 @@ class TodoTableViewCell: UITableViewCell {
     lazy var todoLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .systemFont(ofSize: UIConstant.todoLabelFontSize)
+        label.font = .systemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .natural
-        label.numberOfLines = UIConstant.todoLabelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         label.snp.makeConstraints { make in
-            make.width.equalTo(UIConstant.todoLabelWidth)
+            make.width.equalTo(UIConstants.todoLabelWidth)
         }
         return label
     }()
@@ -36,7 +27,8 @@ class TodoTableViewCell: UITableViewCell {
     lazy var doneButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
-        button.tintColor = .black
+        button.tintColor = .gray
+        button.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -53,6 +45,16 @@ class TodoTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    @objc func doneButtonTapped() {
+        if doneButton.tintColor == .gray {
+            doneButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            doneButton.tintColor = .systemGreen
+        } else if doneButton.tintColor == .systemGreen {
+            doneButton.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+            doneButton.tintColor = .gray
+        }
+    }
 
 }
 
@@ -63,13 +65,13 @@ extension TodoTableViewCell {
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(todoLabel)
         todoLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(UIConstant.leadingIndent)
+            make.leading.equalToSuperview().inset(UIConstants.leadingIndent)
             make.centerY.equalToSuperview()
         }
         
         contentView.addSubview(doneButton)
         doneButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(UIConstant.trailingIndent)
+            make.trailing.equalToSuperview().inset(UIConstants.trailingIndent)
             make.centerY.equalToSuperview()
         }
     }

@@ -8,26 +8,15 @@
 import UIKit
 import SnapKit
 
-// MARK: - UIConstant
-private enum UIConstant {
-    static let userImageViewHeightWidth: CGFloat = 30
-    static let fullNameLabelFontSize: CGFloat = 14
-    static let usernameLabelFontSize: CGFloat = 12
-    static let postNameLabelFontSize: CGFloat = 12
-    static let postTextViewFontSize: CGFloat = 12
-    static let stackViewSpacing: CGFloat = 8
-    static let topIndent: CGFloat = 16
-    static let bottomIndent: CGFloat = 16
-    static let leadingIndent: CGFloat = 16
-    static let trailingIndent: CGFloat = -16
-    static let labelNumberOfLines: Int = 0
-    static let postTextViewWidth: CGFloat = 200
-    static let postTextViewHeight: CGFloat = 150
+protocol PostTableViewCellDelegate: AnyObject {
+    func pushCommentViewController()
 }
 
 class PostTableViewCell: UITableViewCell {
     
     static let identifier = "PostTableViewCell"
+    
+    weak var delegate: PostTableViewCellDelegate?
     
     lazy var userImageView: UIImageView = {
         let imageView = UIImageView()
@@ -35,8 +24,8 @@ class PostTableViewCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.snp.makeConstraints { make in
-            make.height.equalTo(UIConstant.userImageViewHeightWidth)
-            make.width.equalTo(UIConstant.userImageViewHeightWidth)
+            make.height.equalTo(UIConstants.thumbnailImageHeightAndWidth)
+            make.width.equalTo(UIConstants.thumbnailImageHeightAndWidth)
         }
         return imageView
     }()
@@ -44,7 +33,7 @@ class PostTableViewCell: UITableViewCell {
     lazy var fullNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .boldSystemFont(ofSize: UIConstant.fullNameLabelFontSize)
+        label.font = .boldSystemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .natural
         return label
     }()
@@ -52,7 +41,7 @@ class PostTableViewCell: UITableViewCell {
     lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .systemGray
-        label.font = .boldSystemFont(ofSize: UIConstant.usernameLabelFontSize)
+        label.font = .boldSystemFont(ofSize: UIConstants.twelveFontSize)
         label.textAlignment = .natural
         return label
     }()
@@ -60,9 +49,9 @@ class PostTableViewCell: UITableViewCell {
     lazy var postNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .boldSystemFont(ofSize: UIConstant.postNameLabelFontSize)
+        label.font = .boldSystemFont(ofSize: UIConstants.twelveFontSize)
         label.textAlignment = .natural
-        label.numberOfLines = UIConstant.labelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         return label
     }()
     
@@ -70,39 +59,63 @@ class PostTableViewCell: UITableViewCell {
         let textView = UITextView()
         textView.backgroundColor = .secondarySystemBackground
         textView.textColor = .black
-        textView.font = .systemFont(ofSize: UIConstant.postTextViewFontSize)
+        textView.font = .systemFont(ofSize: UIConstants.twelveFontSize)
         textView.textAlignment = .natural
+        textView.isEditable = false
+        textView.isScrollEnabled = false
         textView.snp.makeConstraints { make in
-            make.width.equalTo(UIConstant.postTextViewWidth)
-            make.height.equalTo(UIConstant.postTextViewHeight)
+            make.width.equalTo(UIConstants.textViewWidthPostTVC)
         }
         return textView
+    }()
+    
+    lazy var likeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "heart"), for: .normal)
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var commentButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "bubble"), for: .normal)
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(commentButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var sendButton: UIButton = {
+        let button  = UIButton()
+        button.setImage(UIImage(systemName: "paperplane"), for: .normal)
+        button.tintColor = .black
+        return button
+    }()
+    
+    lazy var uiButtonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = UIConstants.stackViewSixteenSpacing
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        [likeButton, commentButton, sendButton].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        return stackView
     }()
     
     lazy var horizontalStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.spacing = UIConstant.stackViewSpacing
+        stackView.spacing = UIConstants.stackViewSixteenSpacing
         stackView.alignment = .center
         stackView.distribution = .fill
-        [fullNameLabel, usernameLabel].forEach {
+        [userImageView, fullNameLabel, usernameLabel].forEach {
             stackView.addArrangedSubview($0)
         }
         return stackView
     }()
     
-    lazy var verticalStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = UIConstant.stackViewSpacing
-        stackView.alignment = .leading
-        stackView.distribution = .fill
-        [postNameLabel, postTextView].forEach {
-            stackView.addArrangedSubview($0)
-        }
-        return stackView
-    }()
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
@@ -117,6 +130,20 @@ class PostTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func likeButtonTapped() {
+        if likeButton.tintColor == .black {
+            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            likeButton.tintColor = .systemRed
+        } else if likeButton.tintColor == .systemRed {
+            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            likeButton.tintColor = .black
+        }
+    }
+    
+    @objc func commentButtonTapped() {
+        delegate?.pushCommentViewController()
+    }
+    
 }
 
 extension PostTableViewCell {
@@ -124,23 +151,31 @@ extension PostTableViewCell {
     // MARK: - SetupConstraints
     func setupConstraints() {
         contentView.backgroundColor = .secondarySystemBackground
-        contentView.addSubview(userImageView)
-        userImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.topIndent)
-            make.leading.equalToSuperview().inset(UIConstant.leadingIndent)
-        }
         
         contentView.addSubview(horizontalStackView)
         horizontalStackView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.topIndent)
-            make.leading.equalTo(userImageView.snp.trailing).inset(UIConstant.trailingIndent)
+            make.top.equalToSuperview().inset(UIConstants.topIndent)
+            make.leading.equalToSuperview().inset(UIConstants.leadingIndent)
         }
         
-        contentView.addSubview(verticalStackView)
-        verticalStackView.snp.makeConstraints { make in
-            make.top.equalTo(horizontalStackView.snp.bottom).offset(UIConstant.topIndent)
-            make.leading.equalTo(userImageView.snp.trailing).inset(UIConstant.trailingIndent)
-            make.trailing.equalToSuperview().offset(UIConstant.trailingIndent)
+        contentView.addSubview(postNameLabel)
+        postNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(horizontalStackView.snp.bottom).offset(UIConstants.topIndent)
+            make.leading.equalToSuperview().inset(UIConstants.leadingIndent)
+            make.trailing.equalToSuperview().inset(UIConstants.trailingIndent)
+        }
+        
+        contentView.addSubview(postTextView)
+        postTextView.snp.makeConstraints { make in
+            make.top.equalTo(postNameLabel.snp.bottom).offset(UIConstants.topIndent)
+            make.leading.equalToSuperview().inset(UIConstants.leadingIndent)
+        }
+
+        contentView.addSubview(uiButtonStackView)
+        uiButtonStackView.snp.makeConstraints { make in
+            make.top.equalTo(postTextView.snp.bottom).offset(UIConstants.topIndent)
+            make.bottom.equalToSuperview().inset(UIConstants.bottomIndent)
+            make.leading.equalToSuperview().inset(UIConstants.leadingIndent)
         }
     }
 }

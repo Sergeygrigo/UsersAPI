@@ -8,39 +8,18 @@
 import UIKit
 import SnapKit
 
-// MARK: - UIConstant
-private enum UIConstant {
-    static let userImageHeightAndWidth: CGFloat = 100
-    static let fullNameLabelFontSize: CGFloat = 20
-    static let usernameLabelFontSize: CGFloat = 14
-    static let emailLabelFontSize: CGFloat = 14
-    static let cityLabelFontsize: CGFloat = 14
-    static let uiStackViewSpacing: CGFloat = 8
-    static let uiStackViewTopInset: CGFloat = 130
-    static let uiStackViewLeadingOffset: CGFloat = -16
-    static let uiStackViewTrailingOffset: CGFloat = 16
-    static let cellRowHeight: CGFloat = 50
-    static let tableViewTopInset: CGFloat = -30
-    static let tableViewHeight: CGFloat = 150
-    static let labelNumberOfLines: Int = 0
-}
-
 class InfoViewController: UIViewController {
     
     let sections: [String] = ["Albums", "Posts", "Todos"]
-//    var albums: [Album] = [Album]()
-//    var comments: [Comment] = [Comment]()
-//    var photos: [Photo] = [Photo]()
-//    var posts: [Post] = [Post]()
-//    var todos: [Todo] = [Todo]()
+    var userID: Int = 0
     
     lazy var userImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.snp.makeConstraints { make in
-            make.height.equalTo(UIConstant.userImageHeightAndWidth)
-            make.width.equalTo(UIConstant.userImageHeightAndWidth)
+            make.height.equalTo(UIConstants.infoImageHeightAndWidth)
+            make.width.equalTo(UIConstants.infoImageHeightAndWidth)
         }
         return imageView
     }()
@@ -48,36 +27,36 @@ class InfoViewController: UIViewController {
     lazy var fullNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: UIConstant.fullNameLabelFontSize)
+        label.font = UIFont.systemFont(ofSize: UIConstants.twentyFontSize)
         label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         return label
     }()
     
     lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .gray
-        label.font = UIFont.systemFont(ofSize: UIConstant.usernameLabelFontSize)
+        label.font = UIFont.systemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         return label
     }()
     
     lazy var emailLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: UIConstant.emailLabelFontSize)
+        label.font = UIFont.systemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         return label
     }()
     
     lazy var cityLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: UIConstant.cityLabelFontsize)
+        label.font = UIFont.systemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         return label
     }()
     
@@ -86,10 +65,10 @@ class InfoViewController: UIViewController {
         tableView.backgroundColor = .secondarySystemBackground
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(SectionInfoCell.self, forCellReuseIdentifier: SectionInfoCell.identifier)
-        tableView.rowHeight = UIConstant.cellRowHeight
+        tableView.rowHeight = UIConstants.cellRowHeightInfoVC
         tableView.isScrollEnabled = false
         tableView.snp.makeConstraints { make in
-            make.height.equalTo(UIConstant.tableViewHeight)
+            make.height.equalTo(UIConstants.tableViewHeightInfoVC)
         }
         return tableView
     }()
@@ -97,7 +76,7 @@ class InfoViewController: UIViewController {
     lazy var uiStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = UIConstant.uiStackViewSpacing
+        stackView.spacing = UIConstants.stackViewEightSpacing
         stackView.alignment = .center
         stackView.distribution = .fill
         [userImage, fullNameLabel, usernameLabel, emailLabel, cityLabel].forEach {
@@ -114,12 +93,14 @@ class InfoViewController: UIViewController {
         setupConstraints()
     }
     
-    init(userImage: UIImage,
+    init(userID: Int,
+         userImage: UIImage,
          fullNameLabel: String,
          usernameLabel: String,
          emailLabel: String,
          cityLabel: String) {
         super.init(nibName: nil, bundle: nil)
+        self.userID = userID
         self.userImage.image = userImage
         self.fullNameLabel.text = fullNameLabel
         self.usernameLabel.text = "@" + usernameLabel
@@ -153,13 +134,12 @@ extension InfoViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.row {
         case 0:
-            let albumsViewController = AlbumsViewController()
+            let albumsViewController = AlbumsViewController(userID: userID)
             self.navigationController?.pushViewController(albumsViewController, animated: true)
         case 1:
             let postsViewController = PostsViewController(fullName: fullNameLabel.text!, username: usernameLabel.text!)
             self.navigationController?.pushViewController(postsViewController, animated: true)
         case 2:
-//            let todosData = todos[indexPath.row]
             let todosViewController = TodosViewController()
             self.navigationController?.pushViewController(todosViewController, animated: true)
         default:
@@ -177,50 +157,21 @@ extension InfoViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-//        ApiManager.shared.sendRequest(apiType: .getAlbums) { (albums: Albums) in
-//            DispatchQueue.main.async { [weak self] in
-//                guard let self else { return }
-//                self.albums = albums.sorted {
-//                    $0.userID < $1.userID
-//                }
-//                self.tableView.reloadData()
-//            }
-//        }
-        
-//        ApiManager.shared.sendRequest(apiType: .getPosts) { (posts: Posts) in
-//            DispatchQueue.main.async { [weak self] in
-//                guard let self else { return }
-//                self.posts = posts.sorted {
-//                    $0.userID < $1.userID
-//                }
-//                self.tableView.reloadData()
-//            }
-//        }
-        
-//        ApiManager.shared.sendRequest(apiType: .getTodos) { (todos: Todos) in
-//            DispatchQueue.main.async { [weak self] in
-//                guard let self else { return }
-//                self.todos = todos.sorted {
-//                    $0.userID < $1.userID
-//                }
-//                self.tableView.reloadData()
-//            }
-//        }
     }
     
     // MARK: - SetupConstraints
     func setupConstraints() {
         view.addSubview(uiStackView)
         uiStackView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.uiStackViewTopInset)
-            make.leading.equalToSuperview().offset(UIConstant.uiStackViewLeadingOffset)
-            make.trailing.equalToSuperview().offset(UIConstant.uiStackViewTrailingOffset)
+            make.top.equalToSuperview().inset(UIConstants.stackViewTopIndentCommentsVC)
+            make.leading.equalToSuperview().inset(UIConstants.leadingIndent)
+            make.trailing.equalToSuperview().inset(UIConstants.trailingIndent)
             make.centerX.equalToSuperview()
         }
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(uiStackView.snp.bottom).inset(UIConstant.tableViewTopInset)
+            make.top.equalTo(uiStackView.snp.bottom).offset(UIConstants.tableViewTopIndentInfoVC)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.centerX.equalToSuperview()

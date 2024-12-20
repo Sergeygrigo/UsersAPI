@@ -8,22 +8,18 @@
 import UIKit
 import SnapKit
 
-// MARK: - UIConstant
-private enum UIConstant {
-    static let cellRowHeight: CGFloat = 500
-}
-
 class AlbumsViewController: UIViewController {
-    
-    var albums: [Album] = [Album]()
+        
     var photos: [Photo] = [Photo]()
+    var userID: Int = 0
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .secondarySystemBackground
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(AlbumTableViewCell.self, forCellReuseIdentifier: AlbumTableViewCell.identifier)
-        tableView.rowHeight = UIConstant.cellRowHeight
+        tableView.rowHeight = UIConstants.cellRowHeightAlbumVC
+        tableView.estimatedRowHeight = UITableView.automaticDimension
         return tableView
     }()
 
@@ -33,7 +29,16 @@ class AlbumsViewController: UIViewController {
         initialSetup()
         setupConstraints()
     }
-
+    
+    init(userID: Int) {
+        super.init(nibName: nil, bundle: nil)
+        self.userID = userID
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 }
 
 // MARK: - DataSource
@@ -44,8 +49,20 @@ extension AlbumsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: AlbumTableViewCell.identifier, for: indexPath) as! AlbumTableViewCell
-        let photosData = photos[indexPath.row].title
-        cell.titleLabel.text = photosData
+        let photosData = photos[indexPath.row]
+        cell.titleLabel.text = photosData.title
+        
+        if let url = URL(string: photosData.url) {
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                guard let data, error == nil else { return }
+                DispatchQueue.main.async {
+                    cell.imageFromAlbum.image = UIImage(data: data)
+                }
+            }
+            task.resume()
+        }
+        
+        cell.delegate = self
         return cell
     }
 }
@@ -66,16 +83,6 @@ extension AlbumsViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        ApiManager.shared.sendRequest(apiType: .getAlbums) { (albums: Albums) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                self.albums = albums.sorted { 
-                    $0.userID < $1.userID
-                }
-                self.tableView.reloadData()
-            }
-        }
-        
         ApiManager.shared.sendRequest(apiType: .getPhotos) { (photos: Photos) in
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
@@ -93,5 +100,12 @@ extension AlbumsViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+}
+
+extension AlbumsViewController: AlbumTableViewCellDelegate {
+    func pushCommentViewController() {
+        let vc = PhotoCommentsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }

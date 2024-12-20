@@ -8,67 +8,57 @@
 import UIKit
 import SnapKit
 
-// MARK: - UIConstant
-private enum UIConstant {
-    static let labelFontSize: CGFloat = 14
-    static let uiStackViewSpacing: CGFloat = 10
-    static let uiStackViewTopInset: CGFloat = 130
-    static let uiStackViewLeadingOffset: CGFloat = -16
-    static let uiStackViewTrailingOffset: CGFloat = 16
-    static let labelNumberOfLines: Int = 0
-}
-
 class CommentsViewController: UIViewController {
     
     lazy var postIdLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .systemFont(ofSize: UIConstant.labelFontSize)
+        label.font = .systemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         return label
     }()
     
     lazy var idLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .systemFont(ofSize: UIConstant.labelFontSize)
+        label.font = .systemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         return label
     }()
     
     lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .systemFont(ofSize: UIConstant.labelFontSize)
+        label.font = .systemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         return label
     }()
     
     lazy var emailLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .systemFont(ofSize: UIConstant.labelFontSize)
+        label.font = .systemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         return label
     }()
     
     lazy var bodyLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .systemFont(ofSize: UIConstant.labelFontSize)
+        label.font = .systemFont(ofSize: UIConstants.fourteenFontSize)
         label.textAlignment = .center
-        label.numberOfLines = UIConstant.labelNumberOfLines
+        label.numberOfLines = UIConstants.textNumberOfLines
         return label
     }()
     
     lazy var uiStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = UIConstant.uiStackViewSpacing
+        stackView.spacing = UIConstants.stackViewTenSpacing
         stackView.alignment = .center
         stackView.distribution = .fill
         [postIdLabel, idLabel, nameLabel, emailLabel, bodyLabel].forEach {
@@ -97,9 +87,9 @@ extension CommentsViewController {
     func setupConstraints() {
         view.addSubview(uiStackView)
         uiStackView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(UIConstant.uiStackViewTopInset)
-            make.leading.equalToSuperview().offset(UIConstant.uiStackViewLeadingOffset)
-            make.trailing.equalToSuperview().offset(UIConstant.uiStackViewTrailingOffset)
+            make.top.equalToSuperview().inset(UIConstants.stackViewTopIndentCommentsVC)
+            make.leading.equalToSuperview().inset(UIConstants.leadingIndent)
+            make.trailing.equalToSuperview().offset(UIConstants.trailingIndent)
             make.centerX.equalToSuperview()
         }
     }
