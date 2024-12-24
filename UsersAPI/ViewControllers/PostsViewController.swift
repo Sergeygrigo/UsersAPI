@@ -101,4 +101,10 @@ extension PostsViewController: PostTableViewCellDelegate {
         let vc = PostCommentsViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func presentShareSheet() {
+        guard let url = URL(string: "https://www.google.com/") else { return }
+        let shareSheetVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        self.navigationController?.present(shareSheetVC, animated: true)
+    }
 }

@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 class AlbumsViewController: UIViewController {
-        
+    
     var photos: [Photo] = [Photo]()
     var userID: Int = 0
     
@@ -22,7 +22,7 @@ class AlbumsViewController: UIViewController {
         tableView.estimatedRowHeight = UITableView.automaticDimension
         return tableView
     }()
-
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,5 +107,11 @@ extension AlbumsViewController: AlbumTableViewCellDelegate {
     func pushCommentViewController() {
         let vc = PhotoCommentsViewController()
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func presentShareSheet() {
+        guard let image = UIImage(systemName: "bell"), let url = URL(string: "https://www.google.com/") else { return }
+        let shareSheetVC = UIActivityViewController(activityItems: [image, url], applicationActivities: nil)
+        self.navigationController?.present(shareSheetVC, animated: true)
     }
 }

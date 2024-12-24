@@ -10,6 +10,7 @@ import SnapKit
 
 protocol AlbumTableViewCellDelegate: AnyObject {
     func pushCommentViewController()
+    func presentShareSheet()
 }
 
 class AlbumTableViewCell: UITableViewCell {
@@ -54,10 +55,11 @@ class AlbumTableViewCell: UITableViewCell {
         return button
     }()
     
-    lazy var sendButton: UIButton = {
+    lazy var shareButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "paperplane"), for: .normal)
         button.tintColor = .black
+        button.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -67,7 +69,7 @@ class AlbumTableViewCell: UITableViewCell {
         stackView.spacing = UIConstants.stackViewEightSpacing
         stackView.alignment = .center
         stackView.distribution = .fill
-        [likeButton, commentButton, sendButton].forEach {
+        [likeButton, commentButton, shareButton].forEach {
             stackView.addArrangedSubview($0)
         }
         stackView.snp.makeConstraints { make in
@@ -108,6 +110,10 @@ class AlbumTableViewCell: UITableViewCell {
     
     @objc func commentButtonTapped() {
         delegate?.pushCommentViewController()
+    }
+    
+    @objc func shareButtonTapped() {
+        delegate?.presentShareSheet()
     }
     
 }

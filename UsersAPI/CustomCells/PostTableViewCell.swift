@@ -10,6 +10,7 @@ import SnapKit
 
 protocol PostTableViewCellDelegate: AnyObject {
     func pushCommentViewController()
+    func presentShareSheet()
 }
 
 class PostTableViewCell: UITableViewCell {
@@ -85,10 +86,11 @@ class PostTableViewCell: UITableViewCell {
         return button
     }()
     
-    lazy var sendButton: UIButton = {
+    lazy var shareButton: UIButton = {
         let button  = UIButton()
         button.setImage(UIImage(systemName: "paperplane"), for: .normal)
         button.tintColor = .black
+        button.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -98,7 +100,7 @@ class PostTableViewCell: UITableViewCell {
         stackView.spacing = UIConstants.stackViewSixteenSpacing
         stackView.alignment = .center
         stackView.distribution = .fill
-        [likeButton, commentButton, sendButton].forEach {
+        [likeButton, commentButton, shareButton].forEach {
             stackView.addArrangedSubview($0)
         }
         return stackView
@@ -142,6 +144,10 @@ class PostTableViewCell: UITableViewCell {
     
     @objc func commentButtonTapped() {
         delegate?.pushCommentViewController()
+    }
+    
+    @objc func shareButtonTapped() {
+        delegate?.presentShareSheet()
     }
     
 }
