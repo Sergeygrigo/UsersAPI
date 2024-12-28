@@ -8,10 +8,10 @@
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
-        
-    var users: [User] = [User]()
+class MainViewController: UIViewController {
     
+    var users: [User] = [User]()
+            
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .secondarySystemBackground
@@ -26,51 +26,29 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewWillAppear(true)
-        setupConstraints()
         initialSetup()
+        setupTableView()
+        setupConstraints()
+        requestAPI()
     }
 }
 
-// MARK: - DataSource
-extension ViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: UserInfoCell.identifier, for: indexPath) as! UserInfoCell
-        let usersData = users[indexPath.row]
-        cell.userImage.image = UIImage(named: "user")
-        cell.nameLabel.text = usersData.name
-        cell.emailLabel.text = usersData.email
-        return cell
-    }
-}
-
-// MARK: - Delegate
-extension ViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let usersData = users[indexPath.row]
-        let infoViewController = InfoViewController(userID: usersData.id,
-                                                    userImage: UIImage(named: "user")!,
-                                                    fullNameLabel: usersData.name,
-                                                    usernameLabel: usersData.username,
-                                                    emailLabel: usersData.email,
-                                                    cityLabel: usersData.address.city)
-        self.navigationController?.pushViewController(infoViewController, animated: true)
-    }
-}
-
-extension ViewController {
+extension MainViewController {
     
     // MARK: - InitialSetup
     func initialSetup() {
         navigationItem.title = "List of users"
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-
+    }
+    
+    // MARK: - SetupConstraints
+    func setupConstraints() {
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    func requestAPI() {
         ApiManager.shared.sendRequest(apiType: .getUsers) { (users: Users) in
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
@@ -79,14 +57,6 @@ extension ViewController {
                 }
                 self.tableView.reloadData()
             }
-        }
-    }
-    
-    // MARK: - SetupConstraints
-    func setupConstraints() {
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
         }
     }
     
@@ -113,4 +83,41 @@ extension ViewController {
         navigationController?.navigationBar.tintColor = .black
         UIBarButtonItem.appearance().tintColor = .black
     }
+}
+
+extension MainViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func setupTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
+    
+    // MARK: - DataSource
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return users.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserInfoCell.identifier, for: indexPath) as! UserInfoCell
+        let usersData = users[indexPath.row]
+        cell.userImage.image = UIImage(named: "user")
+        cell.nameLabel.text = usersData.name
+        cell.emailLabel.text = usersData.email
+        return cell
+    }
+    
+    // MARK: - Delegate
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let usersData = users[indexPath.row]
+        let infoViewController = InfoViewController(userID: usersData.id,
+                                                    userImage: UIImage(named: "user")!,
+                                                    fullNameLabel: usersData.name,
+                                                    usernameLabel: usersData.username,
+                                                    emailLabel: usersData.email,
+                                                    cityLabel: usersData.address.city)
+        self.navigationController?.pushViewController(infoViewController, animated: true)
+    }
+    
+    
 }

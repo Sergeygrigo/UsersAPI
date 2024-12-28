@@ -36,10 +36,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A527A1612D06E16D0085413F /* Exceptions for "UsersAPI" folder in "UsersAPI" target */ = {
+		A5FE80592D1D52F6002228CC /* Exceptions for "UsersAPI" folder in "UsersAPI" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				"Supporting Files/Info.plist",
 			);
 			target = A5768C002CDBE6CB0081C602 /* UsersAPI */;
 		};
@@ -49,7 +49,7 @@
 		A527A1492D06E16D0085413F /* UsersAPI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A527A1612D06E16D0085413F /* Exceptions for "UsersAPI" folder in "UsersAPI" target */,
+				A5FE80592D1D52F6002228CC /* Exceptions for "UsersAPI" folder in "UsersAPI" target */,
 			);
 			path = UsersAPI;
 			sourceTree = "<group>";
@@ -304,7 +304,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6J2MDPP29H;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = UsersAPI/Info.plist;
+				INFOPLIST_FILE = "UsersAPI/Supporting Files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
@@ -331,7 +331,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6J2MDPP29H;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = UsersAPI/Info.plist;
+				INFOPLIST_FILE = "UsersAPI/Supporting Files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
